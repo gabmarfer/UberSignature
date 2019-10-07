@@ -45,6 +45,11 @@ public class SignatureDrawingViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func loadView() {
+        let signatureView = SignatureView()
+        view = signatureView
+    }
+    
     /// Returns an image of the signature (with a transparent background).
     public var fullSignatureImage: UIImage? {
         return model.fullSignatureImage
@@ -185,4 +190,16 @@ extension Set where Element == UITouch {
         
         return touch?.location(in: touch?.view)
     }
+}
+
+// Fix iOS 13 conflict with new dismissing gesture
+class SignatureView: UIView {
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UIPanGestureRecognizer {
+            return false
+        }
+        return true
+    }
+    
 }
